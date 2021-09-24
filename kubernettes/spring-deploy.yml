@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: spring-deploy
+spec:
+  selector:
+    matchLabels:
+      app: springboot
+  template:
+    metadata:
+      labels:
+        app: springboot
+    spec:
+      containers:
+        - name: springboot
+          image: swathip123/web:v5
+          ports:
+            - containerPort: 8080
+          #command:
+          #  - sleep
+          #  - "1000000"
+          env:
+            - name: DB_SERVER
+              value: mongo
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: spring-service
+spec:
+  type: ClusterIP
+  selector:
+    app: springboot
+  ports:
+    - port: 8080
+      targetPort: 8080
